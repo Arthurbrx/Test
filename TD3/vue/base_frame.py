@@ -4,14 +4,14 @@ from functools import partial
 
 class BaseFrame(Frame):
     def __init__(self, root_frame):
-        super().__init__(root_frame.master, width=300)
+        super().__init__(root_frame.master)
         self._root_frame = root_frame
 
     def show(self):
-        self.grid(padx=10, pady=10)
+        self.pack(padx=10, pady=10)
 
     def hide(self):
-        self.grid_forget()
+        self.pack_forget()
 
     def quit(self):
         self._root_frame.quit()
