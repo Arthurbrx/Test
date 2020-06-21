@@ -5,23 +5,25 @@ from vue.member_frames.subscription_frame import SubscriptionFrame
 from vue.member_frames.list_members_frame import ListMembersFrame
 from vue.member_frames.profile_frame import ProfileFrame
 from vue.sports_frames.sports_frame import SportsFrame
-
+from vue.planning_frames.planning import PlanningFrame
 
 class RootFrame(Frame):
     """
     Member actions
     """
 
-    def __init__(self, member_controller, master=None):
+    def __init__(self, person_controller, sport_controller, planning_controller, master=None):
         super().__init__(master)
-        self._member_controller = member_controller
+        self._person_controller = person_controller
+        self._sport_controller = sport_controller
+        self._planning_controller = planning_controller
         self._menu_frame = MemberMenuFrame(self)
         self._frames = []
 
     def show_subscribe(self):
         self.hide_menu()
         # Show formular subscribe
-        subscribe_frame = SubscriptionFrame(self._member_controller, self)
+        subscribe_frame = SubscriptionFrame(self._person_controller, self)
         subscribe_frame.show()
         self._frames.append(subscribe_frame)
 
@@ -29,22 +31,30 @@ class RootFrame(Frame):
 
         # show members
         self.hide_menu()
-        list_frame = ListMembersFrame(self._member_controller, self)
+        list_frame = ListMembersFrame(self._person_controller, self)
         self._frames.append(list_frame)
         list_frame.show()
 
     def show_sports(self):
 
         self.hide_menu() 
-        sports_frame = SportsFrame(self._member_controller, self) 
+        sports_frame = SportsFrame(self._sport_controller, self._person_controller, self) 
         self._frames.append(sports_frame) 
         sports_frame.show() 
 
+    def show_planning(self):
+
+       self.hide_menu() 
+       planning_frame = PlanningFrame(self._planning_controller, self) 
+       self._frames.append(planning_frame) 
+       planning_frame.show() 
+
+
     def show_profile(self, member_id):
-        member_data = self._member_controller.get_member(member_id)
+        member_data = self._person_controller.get_member(member_id)
 
         self.hide_frames()
-        profile_frame = ProfileFrame(self._member_controller, member_data, self)
+        profile_frame = ProfileFrame(self._person_controller, member_data, self)
         self._frames.append(profile_frame)
         profile_frame.show()
 

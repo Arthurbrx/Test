@@ -35,7 +35,7 @@ class SportDAO(DAO):
             raise ResourceNotFound()
 
     def create(self, data: dict):
-        sport = Sport(name=data.get('name'), description=data.get('description'))
+        sport = Sport(name=data.get('name'))
         self._database_session.add(sport)
         self._database_session.flush()
         return sport
@@ -43,8 +43,7 @@ class SportDAO(DAO):
     def update(self, sport: Sport, data: dict):
         if 'name' in data:
             sport.name = data['name']
-        if 'description' in data:
-            sport.description = data['description']
+    
         try:
             self._database_session.merge(Sport)
             self._database_session.flush()

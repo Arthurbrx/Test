@@ -1,20 +1,18 @@
-from model.mapping import Base
+from model.mapping import Base, generate_id
 import uuid
 
-from sqlalchemy import Column, String, UniqueConstraint
+from sqlalchemy import Column, String, UniqueConstraint, ForeignKey
+
+from model.mapping.person import Person
 
 
-class Member(Base):
+class Member(Person):
     __tablename__ = 'members'
-    __table_args__ = (UniqueConstraint('firstname', 'lastname'),)
 
-    id = Column(String(36), default=str(uuid.uuid4()), primary_key=True)
-
-    firstname = Column(String(50), nullable=False)
-    lastname = Column(String(50), nullable=False)
-
-    email = Column(String(256), nullable=False)
-
+    id = Column(String(36), ForeignKey('people.id'), primary_key=True)
+    __mapper_args__ = {
+        'polymorphic_identity': 'member',
+    }
     def __repr__(self):
         return "<Member(%s %s)>" % (self.firstname, self.lastname.upper())
 

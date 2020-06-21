@@ -1,16 +1,21 @@
 
 from tkinter import *
-
+from controller.person_controller import PersonController
 from vue.base_frame import BaseFrame
 
 
 class ListMembersFrame(BaseFrame):
 
-    def __init__(self, member_controller, root_frame):
+    def __init__(self, person_controller: PersonController, root_frame: Frame, person_type: str = None):
         super().__init__(root_frame)
-        self._member_controller = member_controller
-        self._create_widgets()
+        self._person_controller = person_controller
+
         self._members = None
+        if person_type is None:
+            self._person_type = 'person'
+        else:
+            self._person_type = person_type
+        self._create_widgets()
 
     def _create_widgets(self):
 
@@ -42,7 +47,7 @@ class ListMembersFrame(BaseFrame):
         self._root_frame.show_profile(member['id'])
 
     def show(self):
-        self._members = self._member_controller.list_members()
+        self._members = self._person_controller.list_people(person_type = self._person_type)
         self.listbox.delete(0, END)
         for index, member in enumerate(self._members):
             text = member['firstname'].capitalize() + ' ' + member['lastname'].capitalize()
