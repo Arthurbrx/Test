@@ -15,21 +15,18 @@ class SportController:
         self._database_engine = database_engine
 
     def list_sports(self):
-        logging.info("List sports")
         with self._database_engine.new_session() as session:
             sports = SportDAO(session).get_all()
             sports_data = [sport.to_dict() for sport in sports]
         return sports_data
 
     def get_sport(self, sport_id):
-        logging.info("Get sport %s" % sport_id)
         with self._database_engine.new_session() as session:
             sport = SportDAO(session).get(sport_id)
             sport_data = sport.to_dict()
         return sport_data
 
     def create_sport(self, data):
-        logging.info("Create sport with data %s" % str(data))
         self._check_sport_data(data)
         try:
             with self._database_engine.new_session() as session:
@@ -38,11 +35,9 @@ class SportController:
                 sport_data = sport.to_dict()
                 return sport_data
         except Error as e:
-            logging.error("An Error occured (%s)" % str(e))
             raise e
 
     def update_sport(self, sport_id, sport_data):
-        logging.info("Update sport %s with data: %s" % (sport_id, str(sport_data)))
         with self._database_engine.new_session() as session:
             dao = SportDAO(session)
             sport = dao.get(sport_id)
@@ -50,14 +45,12 @@ class SportController:
             return sport.to_dict()
 
     def delete_sport(self, sport_id):
-        logging.info("Delete person %s" % sport_id)
         with self._database_engine.new_session() as session:
             dao = SportDAO(session)
             sport = dao.get(sport_id)
             dao.delete(sport)
 
     def search_sport(self, name):
-        logging.info("Search sport %s" % name)
         with self._database_engine.new_session() as session:
             dao = SportDAO(session)
             sport = dao.get_by_name(name)
@@ -67,7 +60,6 @@ class SportController:
         name_pattern = re.compile("^[\S-]{2,50}$")
         specs = {
             "name": {"type": str, "regex": name_pattern},
-            "description": {"type": str}
         }
         self._check_data(data, specs, update=update)
 

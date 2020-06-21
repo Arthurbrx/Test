@@ -9,9 +9,9 @@ from exceptions import Error
 
 class SubscriptionFrame(BaseFrame):
 
-    def __init__(self, member_controller, master=None):
+    def __init__(self, person_controller, master=None):
         super().__init__(master)
-        self._member_controller = member_controller
+        self._person_controller = person_controller
         self.create_widgets()
         self.name_pattern = re.compile("^[\S-]{2,50}$")
         self.email_pattern = re.compile("^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$")
@@ -46,7 +46,8 @@ class SubscriptionFrame(BaseFrame):
         data = dict(firstname=self.firstname_entry.get(), lastname=self.lastname_entry.get(),
                     email=self.email_entry.get())
         try:
-            member_data = self._member_controller.create_member(data)
+            print (data)
+            member_data = self._person_controller.create_member(data)
             messagebox.showinfo("Success",
                                 "Member %s %s created !" % (member_data['firstname'], member_data['lastname']))
 
